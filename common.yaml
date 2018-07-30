@@ -6,6 +6,7 @@ services:
             context: ./odoo
             args:
                 CONFIG_BUILD: "false"
+                ODOO_VERSION: $ODOO_MINOR
         environment:
             ADMIN_PASSWORD: "$ODOO_ADMIN_PASSWORD"
             INITIAL_LANG: "$INITIAL_LANG"

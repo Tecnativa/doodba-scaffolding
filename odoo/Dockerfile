@@ -1,2 +1,2 @@
-# XXX Base version must match $ODOO_VERSION in .env file
-FROM tecnativa/odoo-base:11.0
+ARG ODOO_VERSION
+FROM tecnativa/doodba:${ODOO_VERSION}-onbuild
