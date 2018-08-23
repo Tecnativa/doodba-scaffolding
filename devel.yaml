@@ -9,9 +9,10 @@ services:
             default:
             public:
         ports:
+            - "127.0.0.1:6899:6899"
             - "127.0.0.1:${ODOO_MAJOR}069:8069"
         environment:
-            PORT: 8069
+            PORT: "6899 8069"
             TARGET: odoo
 
     odoo:
@@ -28,6 +29,7 @@ services:
                 COMPILE: "false"
         environment:
             ADMIN_PASSWORD: admin
+            ENABLE_PTVSD: "${DOODBA_ENABLE_PTVSD:-0}"
             PGDATABASE: devel
             PYTHONOPTIMIZE: ""
             SMTP_PORT: "1025"
