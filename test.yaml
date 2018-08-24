@@ -69,8 +69,6 @@ networks:
     inverseproxy_shared:
         external: true
 
-    public:
-
 volumes:
     filestore:
     db:
