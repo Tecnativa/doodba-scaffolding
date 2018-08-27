@@ -11,15 +11,11 @@ services:
             SMTP_PORT: "1025"
         restart: unless-stopped
         depends_on:
-            - cdnjs_cloudflare_proxy
             - db
-            - fonts_googleapis_proxy
-            - fonts_gstatic_proxy
-            - google_proxy
-            - gravatar_proxy
             - smtp
         networks:
             default:
+            globalwhitelist_shared:
             inverseproxy_shared:
         labels:
             traefik.dbmanager.frontend.auth.basic:
@@ -61,77 +57,17 @@ services:
             traefik.port: "8025"
             traefik.frontend.rule: "Host:${DOMAIN_TEST};PathPrefixStrip:/smtpfake/"
 
-    # Whitelist outgoing traffic for tests, reports, etc.
-    cdnjs_cloudflare_proxy:
-        image: tecnativa/whitelist
-        restart: unless-stopped
-        networks:
-            default:
-                aliases:
-                    - cdnjs.cloudflare.com
-            public:
-        environment:
-            TARGET: cdnjs.cloudflare.com
-            PRE_RESOLVE: 1
-
-    fonts_googleapis_proxy:
-        image: tecnativa/whitelist
-        restart: unless-stopped
-        networks:
-            default:
-                aliases:
-                    - fonts.googleapis.com
-            public:
-        environment:
-            TARGET: fonts.googleapis.com
-            PRE_RESOLVE: 1
-
-    fonts_gstatic_proxy:
-        image: tecnativa/whitelist
-        restart: unless-stopped
-        networks:
-            default:
-                aliases:
-                    - fonts.gstatic.com
-            public:
-        environment:
-            TARGET: fonts.gstatic.com
-            PRE_RESOLVE: 1
-
-    google_proxy:
-        image: tecnativa/whitelist
-        restart: unless-stopped
-        networks:
-            default:
-                aliases:
-                    - www.google.com
-            public:
-        environment:
-            TARGET: www.google.com
-            PRE_RESOLVE: 1
-
-    gravatar_proxy:
-        image: tecnativa/whitelist
-        restart: unless-stopped
-        networks:
-            default:
-                aliases:
-                    - www.gravatar.com
-            public:
-        environment:
-            TARGET: www.gravatar.com
-            PRE_RESOLVE: 1
-
 networks:
     default:
         internal: true
         driver_opts:
             encrypted: 1
 
-    inverseproxy_shared:
+    globalwhitelist_shared:
         external: true
 
-    public:
+    inverseproxy_shared:
+        external: true
 
 volumes:
     filestore:
