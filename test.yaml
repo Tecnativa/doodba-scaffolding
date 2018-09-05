@@ -18,6 +18,8 @@ services:
             globalwhitelist_shared:
             inverseproxy_shared:
         labels:
+            traefik.frontend.headers.customResponseHeaders:
+                "X-Robots-Tag:noindex, nofollow"
             traefik.dbmanager.frontend.auth.basic:
                 "${DB_USER}:${ODOO_ADMIN_PASSWORD_BCRYPT}"
             traefik.dbmanager.frontend.rule:
