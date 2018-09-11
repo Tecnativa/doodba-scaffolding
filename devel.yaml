@@ -29,7 +29,7 @@ services:
                 COMPILE: "false"
         environment:
             ADMIN_PASSWORD: admin
-            ENABLE_PTVSD: "${DOODBA_ENABLE_PTVSD:-0}"
+            PTVSD_ENABLE: "${DOODBA_PTVSD_ENABLE:-0}"
             PGDATABASE: devel
             PYTHONOPTIMIZE: ""
             SMTP_PORT: "1025"
