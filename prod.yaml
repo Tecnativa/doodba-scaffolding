@@ -5,6 +5,8 @@ services:
             file: common.yaml
             service: odoo
         restart: unless-stopped
+        environment:
+            INITIAL_LANG: "$INITIAL_LANG"
         depends_on:
             - db
             - smtp
