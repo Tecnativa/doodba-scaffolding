@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "EditorConfig.editorconfig",
+        "lextudio.restructuredtext",
+        "mrorz.language-gettext",
+        "ms-python.python",
+        "PeterJausovec.vscode-docker",
+        "qub.qub-xml-vscode",
+        "robinbentley.sass-indented",
+    ]
+}
