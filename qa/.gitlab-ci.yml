@@ -1,0 +1,98 @@
+stages:
+  - build
+  - test
+
+variables: &globalvars
+    ODOO_REPO: "odoo/odoo"
+    ODOO_MINOR: "11.0"
+    REGISTRY_HOST: "user/image"
+    GIT_DEPTH: "3"
+    GIT_STRATEGY: none
+    GIT_HOST: "git-repo"
+    GIT_DOCKER_PROJECT_REPO: "doodba-scaffolding"
+    CI_IMAGE: "$REGISTRY_HOST/$CI_PROJECT_NAME-$ODOO_MINOR"
+    CI_TEST_IMAGE: "$REGISTRY_HOST/$CI_PROJECT_NAME-$ODOO_MINOR-test"
+    PGHOST: "localhost"
+    POSTGRES_DB: test
+    POSTGRES_USER: odoo
+    POSTGRES_PASSWORD: "odoopassword"
+    ADDON_CATEGORIES: "--private"
+
+before_script:
+    - eval "$(ssh-agent -s)"
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    - echo "$SSH_CONFIG" > ~/.ssh/config
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add  - > /dev/null
+    - chmod 600 ~/.ssh/ -R
+    - echo $GCE_SERVICE_ACCOUNT_JSON > /service_account.json
+
+
+# Build docker image using dind / shell executor etc
+Build:
+ image: google/cloud-sdk:alpine
+ stage: build
+ variables:
+   <<: *globalvars
+   GIT_STRATEGY: clone
+ script:
+   - gcloud auth activate-service-account --key-file=/service_account.json
+   - git clone $GIT_HOST/$GIT_DOCKER_PROJECT_REPO.git -b ${ODOO_MINOR} --depth=1 /$CI_PROJECT_NAME
+   - cp $CI_PROJECT_DIR/* /$CI_PROJECT_NAME/src/private -R;
+   - gcloud builds submit --config /$CI_PROJECT_NAME/cloudbuild.yaml /$CI_PROJECT_NAME --substitutions _CI_IMAGE=$CI_IMAGE,_CI_TEST_IMAGE=$CI_TEST_IMAGE,_CI_PIPELINE_ID=$CI_PIPELINE_ID
+
+# Use gitlab service to help run the odoo image for testing
+Test Addons:
+  services:
+    - name: postgres:10.0-alpine
+  image: ${CI_TEST_IMAGE}:${CI_PIPELINE_ID}
+  stage: test
+  before_script: []
+  script:
+    # Execute entrypoint to wait for db to be ready and other things
+    - /opt/odoo/common/entrypoint
+    # Initialize the database and install all the repository modules
+    - addons init -i $ADDON_CATEGORIES
+    # Execute coverage tests on the initialized database
+    - qa_coverage
+    # Move coverage report
+    - mv /qa/artifacts/coverage .
+  artifacts:
+    paths:
+      - coverage
+    when: always
+  coverage: /TOTAL.* (\d+)%/
+
+Pylint Loose: &pylint
+  image: ${CI_TEST_IMAGE}:${CI_PIPELINE_ID}
+  stage: test
+  before_script: []
+  script:
+    - qa_pylint
+
+Pylint Strict:
+  <<: *pylint
+  variables:
+    LINT_MODE: "pr"
+  except:
+    - ^\d+\.\d+$
+
+Pylint Strict Warnings:
+  <<: *pylint
+  allow_failure: true
+  only:
+    - ^\d+\.\d+$
+
+Pylint Beta:
+  <<: *pylint
+  variables:
+    LINT_MODE: "beta"
+  allow_failure: true
+
+Flake8:
+  image: ${CI_TEST_IMAGE}:${CI_PIPELINE_ID}
+  stage: test
+  before_script: []
+  script:
+    - qa_flake8

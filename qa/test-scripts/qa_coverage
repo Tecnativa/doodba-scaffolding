@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+[ "$VERBOSE" -lt 1 ] || set -x
+
+# Check addons exist
+returncode=0
+addons="$(addons list -i $ADDONS_EXTRA_ARGS $ADDON_CATEGORIES)" || returncode=$?
+
+# If no addons are found, it's done
+[ "$returncode" -eq 2 ] && exit 0 || [ "$returncode" -eq 0 ]
+
+# Test addons and report coverage
+odoo="$(realpath "$(which odoo)")"
+cd
+coverage run \
+    --source "$(addons list -if $ADDONS_EXTRA_ARGS $ADDON_CATEGORIES)" \
+    --omit '*/__openerp__.py,*/__manifest__.py,/opt/odoo/custom/src/*/*/__init__.py' \
+    "$odoo" -d $PGDATABASE --stop-after-init --workers 0 --test-enable -u "$addons"
+returncode=$?
+coverage report --skip-covered
+mkdir -p /qa/artifacts/coverage
+coverage html --skip-covered --directory /qa/artifacts/coverage
+exit $returncode

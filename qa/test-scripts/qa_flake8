@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+[ "$VERBOSE" -lt 1 ] || set -x
+
+# Check addons exist
+errorcode=0
+addons="$(addons list -ifs ' ' $ADDONS_EXTRA_ARGS $ADDON_CATEGORIES)" || errorcode=$?
+
+# If no addons are found, it's done
+[ "$errorcode" -eq 2 ] && exit 0 || [ "$errorcode" -eq 0 ]
+
+cd /qa/mqt
+export PATH="$PATH:/qa/mqt/travis"
+
+# Lint
+export INCLUDE_LINT="$addons"
+test_flake8

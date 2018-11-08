@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -e
+[ "$VERBOSE" -lt 1 ] || set -x
+
+# Check addons exist
+errorcode=0
+addons="$(addons list -ifs ' ' $ADDONS_EXTRA_ARGS $ADDON_CATEGORIES)" || errorcode=$?
+
+# If no addons are found, it's done
+[ "$errorcode" -eq 2 ] && exit 0 || [ "$errorcode" -eq 0 ]
+
+# Configure pylint
+if [ -n "$LINT_ENABLE" ]; then
+    enable="--enable $LINT_ENABLE"
+fi
+if [ -n "$LINT_DISABLE" ]; then
+    disable="--disable $LINT_DISABLE"
+fi
+
+PYLINT_CONFIG_FILE="travis_run_pylint"
+PYLINT_CONFIG_FILE+=${LINT_MODE+_$LINT_MODE}.cfg
+
+# Lint
+# TODO Use MQT's `test_pylint` directly when it becomes more reusable
+code=0
+for addon in $addons; do
+    pylint --load-plugins pylint_odoo \
+        --rcfile /qa/mqt/travis/cfg/$PYLINT_CONFIG_FILE \
+        --valid_odoo_versions=$ODOO_VERSION \
+        $enable $disable $addon || code=$?
+done
+
+exit $code
