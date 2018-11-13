@@ -8,6 +8,7 @@
     "python.linting.flake8Args": [
         "--config=${workspaceRoot}/.vscode/doodba/travis_run_flake8.cfg",
     ],
+    "python.linting.flake8Enabled": true,
     "python.linting.ignorePatterns": [
         "${workspaceRoot}/odoo/custom/src/odoo",
     ],
@@ -16,6 +17,7 @@
         "--load-plugins=pylint_odoo",
         "--rcfile='${workspaceRoot}/.vscode/doodba/doodba_pylint.cfg'",
     ],
+    "python.linting.pylintEnabled": true,
     "python.pythonPath": "${workspaceRoot}/.vscode/doodba/python",
     "search.useIgnoreFiles": false,
     "search.followSymlinks": false,
