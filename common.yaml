@@ -61,4 +61,5 @@ services:
             PGPASSWORD: "$DB_PASSWORD"
             PGUSER: "$DB_USER"
         volumes:
+            - backup_cache:/root:z
             - filestore:/mnt/backup/src/odoo:z
