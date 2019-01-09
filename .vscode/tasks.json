@@ -119,5 +119,18 @@
             ],
             "problemMatcher": [],
         },
+        {
+            "label": "Last logs",
+            "type": "process",
+            "command": "docker-compose",
+            "args": [
+                "logs",
+                "--tail",
+                "20",
+                "-f"
+            ],
+            "isBackground": true,
+            "problemMatcher": [],
+        },
     ],
 }
