@@ -5,7 +5,7 @@ services:
             file: common.yaml
             service: odoo
         environment:
-            PGDATABASE: test
+            PGDATABASE: &dbname test
             # You may want demo data for testing
             WITHOUT_DEMO: "false"
             SMTP_PORT: "1025"
@@ -42,6 +42,8 @@ services:
         extends:
             file: common.yaml
             service: db
+        environment:
+            POSTGRES_DB: *dbname
         restart: unless-stopped
 
     smtp:
