@@ -9,6 +9,7 @@ services:
             # You may want demo data for testing
             WITHOUT_DEMO: "false"
             SMTP_PORT: "1025"
+            SMTP_SERVER: smtplocal
         restart: unless-stopped
         depends_on:
             - db
@@ -53,6 +54,8 @@ services:
         restart: unless-stopped
         networks:
             default:
+                aliases:
+                    - smtplocal
             inverseproxy_shared:
         labels:
             traefik.docker.network: "inverseproxy_shared"
