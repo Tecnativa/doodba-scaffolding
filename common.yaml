@@ -8,8 +8,9 @@ services:
                 ODOO_VERSION: $ODOO_MINOR
         environment:
             ADMIN_PASSWORD: "$ODOO_ADMIN_PASSWORD"
-            PGPASSWORD: "$DB_PASSWORD"
-            PGUSER: "$DB_USER"
+            PGDATABASE: &dbname prod
+            PGPASSWORD: &dbpass "$DB_PASSWORD"
+            PGUSER: &dbuser "$DB_USER"
             DB_FILTER: "$DB_FILTER"
             PROXY_MODE: "$ODOO_PROXY_MODE"
         tty: true
@@ -25,8 +26,9 @@ services:
     db:
         image: postgres:${DB_VERSION}-alpine
         environment:
-            POSTGRES_USER: "$DB_USER"
-            POSTGRES_PASSWORD: "$DB_PASSWORD"
+            POSTGRES_DB: *dbname
+            POSTGRES_PASSWORD: *dbpass
+            POSTGRES_USER: *dbuser
         volumes:
             - db:/var/lib/postgresql/data:z
         command:
@@ -59,9 +61,9 @@ services:
             EMAIL_FROM: "$BACKUP_EMAIL_FROM"
             EMAIL_TO: "$BACKUP_EMAIL_TO"
             PASSPHRASE: "$BACKUP_ENCRYPT_KEY"
-            PGDATABASE: prod
-            PGPASSWORD: "$DB_PASSWORD"
-            PGUSER: "$DB_USER"
+            PGDATABASE: *dbname
+            PGPASSWORD: *dbpass
+            PGUSER: *dbuser
             SMTP_HOST: smtplocal
         volumes:
             - backup_cache:/root:z

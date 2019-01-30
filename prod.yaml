@@ -6,8 +6,8 @@ services:
             service: odoo
         restart: unless-stopped
         environment:
+            DOODBA_ENVIRONMENT: prod
             INITIAL_LANG: "$INITIAL_LANG"
-            PGDATABASE: &dbname prod
             SMTP_SERVER: smtplocal
         depends_on:
             - db
@@ -39,8 +39,6 @@ services:
         extends:
             file: common.yaml
             service: db
-        environment:
-            POSTGRES_DB: *dbname
         restart: unless-stopped
 
     smtp:

@@ -29,6 +29,7 @@ services:
                 COMPILE: "false"
         environment:
             ADMIN_PASSWORD: admin
+            DOODBA_ENVIRONMENT: devel
             PTVSD_ENABLE: "${DOODBA_PTVSD_ENABLE:-0}"
             PGDATABASE: &dbname devel
             PYTHONOPTIMIZE: ""
