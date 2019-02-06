@@ -33,6 +33,7 @@ services:
             PTVSD_ENABLE: "${DOODBA_PTVSD_ENABLE:-0}"
             PGDATABASE: &dbname devel
             PYTHONOPTIMIZE: ""
+            PYTHONPATH: /opt/odoo/custom/src/odoo
             SMTP_PORT: "1025"
             # You want demo data for development
             WITHOUT_DEMO: "false"
