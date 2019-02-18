@@ -5,7 +5,7 @@ services:
             file: common.yaml
             service: odoo
         environment:
-            DOODBA_ENVIRONMENT: test
+            DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-test}"
             # You may want demo data for testing
             WITHOUT_DEMO: "false"
             SMTP_PORT: "1025"
