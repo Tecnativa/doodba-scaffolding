@@ -6,8 +6,8 @@ services:
             service: odoo
         environment:
             DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-test}"
-            # You may want demo data for testing
-            WITHOUT_DEMO: "false"
+            # To install demo data export DOODBA_WITHOUT_DEMO=false
+            WITHOUT_DEMO: "${DOODBA_WITHOUT_DEMO-all}"
             SMTP_PORT: "1025"
             SMTP_SERVER: smtplocal
         restart: unless-stopped

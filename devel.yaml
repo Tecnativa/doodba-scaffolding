@@ -35,8 +35,8 @@ services:
             PYTHONOPTIMIZE: ""
             PYTHONPATH: /opt/odoo/custom/src/odoo
             SMTP_PORT: "1025"
-            # You want demo data for development
-            WITHOUT_DEMO: "false"
+            # To avoid installing demo data export DOODBA_WITHOUT_DEMO=all
+            WITHOUT_DEMO: "${DOODBA_WITHOUT_DEMO-false}"
         volumes:
             - ./odoo/custom:/opt/odoo/custom:ro,z
             - ./odoo/auto/addons:/opt/odoo/auto/addons:rw,z
