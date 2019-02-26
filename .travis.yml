@@ -36,7 +36,7 @@ script:
     -e COMPOSE_FILE=test.yaml
     -e ODOO_MAJOR=$ODOO_MAJOR
     -e ODOO_MINOR=$ODOO_MINOR
-    tecnativa/doodba-qa:no-qa-volume"
+    tecnativa/doodba-qa"
   - $qa networks-autocreate
   - $qa build
   - $qa closed-prs
