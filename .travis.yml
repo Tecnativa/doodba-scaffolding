@@ -37,6 +37,7 @@ script:
     -e ODOO_MAJOR=$ODOO_MAJOR
     -e ODOO_MINOR=$ODOO_MINOR
     tecnativa/doodba-qa"
+  - $qa secrets-setup
   - $qa networks-autocreate
   - $qa build
   - $qa closed-prs

@@ -4,6 +4,9 @@ services:
         extends:
             file: common.yaml
             service: odoo
+        env_file:
+            - .docker/odoo.env
+            - .docker/db-access.env
         environment:
             DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-test}"
             # To install demo data export DOODBA_WITHOUT_DEMO=false
@@ -21,18 +24,8 @@ services:
         labels:
             traefik.frontend.headers.customResponseHeaders:
                 "X-Robots-Tag:noindex, nofollow"
-            traefik.dbmanager.frontend.auth.basic:
-                "${DB_USER}:${ODOO_ADMIN_PASSWORD_BCRYPT}"
-            traefik.dbmanager.frontend.rule:
-                "Host:${DOMAIN_TEST};PathPrefix:/web/database/"
-            traefik.dbselector.frontend.rule:
-                "Host:${DOMAIN_TEST};PathPrefix:/web/database/{p:selector|list}"
             traefik.longpolling.frontend.rule:
                 "Host:${DOMAIN_TEST};PathPrefix:/longpolling/"
-            traefik.websiteinfo.frontend.auth.basic:
-                "${DB_USER}:${ODOO_ADMIN_PASSWORD_BCRYPT}"
-            traefik.websiteinfo.frontend.rule:
-                "Host:${DOMAIN_TEST};Path:/website/info"
             traefik.www.frontend.rule: "Host:${DOMAIN_TEST}"
         command:
             - odoo
@@ -43,6 +36,8 @@ services:
         extends:
             file: common.yaml
             service: db
+        env_file:
+            - .docker/db-creation.env
         restart: unless-stopped
 
     smtp:

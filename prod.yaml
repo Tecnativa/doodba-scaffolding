@@ -5,6 +5,9 @@ services:
             file: common.yaml
             service: odoo
         restart: unless-stopped
+        env_file:
+            - .docker/odoo.env
+            - .docker/db-access.env
         environment:
             DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-prod}"
             INITIAL_LANG: "$INITIAL_LANG"
@@ -16,18 +19,8 @@ services:
             default:
             inverseproxy_shared:
         labels:
-            traefik.dbmanager.frontend.auth.basic:
-                "${DB_USER}:${ODOO_ADMIN_PASSWORD_BCRYPT}"
-            traefik.dbmanager.frontend.rule:
-                "Host:${DOMAIN_PROD};PathPrefix:/web/database/"
-            traefik.dbselector.frontend.rule:
-                "Host:${DOMAIN_PROD};PathPrefix:/web/database/{p:selector|list}"
             traefik.longpolling.frontend.rule:
                 "Host:${DOMAIN_PROD};PathPrefix:/longpolling/"
-            traefik.websiteinfo.frontend.auth.basic:
-                "${DB_USER}:${ODOO_ADMIN_PASSWORD_BCRYPT}"
-            traefik.websiteinfo.frontend.rule:
-                "Host:${DOMAIN_PROD};Path:/website/info"
             traefik.www.frontend.rule: "Host:${DOMAIN_PROD}"
             traefik.alt.frontend.rule: "Host:${DOMAIN_PROD_ALT}"
             traefik.alt.frontend.redirect.regex:
@@ -39,12 +32,16 @@ services:
         extends:
             file: common.yaml
             service: db
+        env_file:
+            - .docker/db-creation.env
         restart: unless-stopped
 
     smtp:
         extends:
             file: common.yaml
             service: smtpreal
+        env_file:
+            - .docker/smtp.env
         networks:
             default:
                 aliases:
@@ -55,6 +52,9 @@ services:
         extends:
             file: common.yaml
             service: backup
+        env_file:
+            - .docker/backup.env
+            - .docker/db-access.env
         restart: unless-stopped
         depends_on:
             - db

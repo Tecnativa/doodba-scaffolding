@@ -28,7 +28,6 @@ services:
                 CLEAN: "false"
                 COMPILE: "false"
         environment:
-            ADMIN_PASSWORD: admin
             DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-devel}"
             PTVSD_ENABLE: "${DOODBA_PTVSD_ENABLE:-0}"
             PGDATABASE: &dbname devel
@@ -61,6 +60,7 @@ services:
             service: db
         environment:
             POSTGRES_DB: *dbname
+            POSTGRES_PASSWORD: odoopassword
 
     smtp:
         extends:
