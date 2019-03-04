@@ -7,9 +7,7 @@ services:
             args:
                 ODOO_VERSION: $ODOO_MINOR
         environment:
-            ADMIN_PASSWORD: "$ODOO_ADMIN_PASSWORD"
             PGDATABASE: &dbname prod
-            PGPASSWORD: &dbpass "$DB_PASSWORD"
             PGUSER: &dbuser "$DB_USER"
             DB_FILTER: "$DB_FILTER"
             PROXY_MODE: "$ODOO_PROXY_MODE"
@@ -27,7 +25,6 @@ services:
         image: postgres:${DB_VERSION}-alpine
         environment:
             POSTGRES_DB: *dbname
-            POSTGRES_PASSWORD: *dbpass
             POSTGRES_USER: *dbuser
         volumes:
             - db:/var/lib/postgresql/data:z
@@ -46,7 +43,6 @@ services:
             MAIL_RELAY_HOST: "$SMTP_REAL_RELAY_HOST"
             MAIL_RELAY_PORT: "$SMTP_REAL_RELAY_PORT"
             MAIL_RELAY_USER: "$SMTP_REAL_RELAY_USER"
-            MAIL_RELAY_PASS: "$SMTP_REAL_RELAY_PASS"
             MAIL_CANONICAL_DOMAINS: "$SMTP_REAL_CANONICAL_DOMAINS"
             MAIL_NON_CANONICAL_DEFAULT: "$SMTP_REAL_NON_CANONICAL_DEFAULT"
 
@@ -55,14 +51,10 @@ services:
         hostname: backup
         domainname: "$DOMAIN_PROD"
         environment:
-            AWS_ACCESS_KEY_ID: "$BACKUP_S3_ACCESS_KEY"
-            AWS_SECRET_ACCESS_KEY: "$BACKUP_S3_SECRET_KEY"
             DST: "s3://s3.amazonaws.com/$BACKUP_S3_BUCKET"
             EMAIL_FROM: "$BACKUP_EMAIL_FROM"
             EMAIL_TO: "$BACKUP_EMAIL_TO"
-            PASSPHRASE: "$BACKUP_ENCRYPT_KEY"
             PGDATABASE: *dbname
-            PGPASSWORD: *dbpass
             PGUSER: *dbuser
             SMTP_HOST: smtplocal
         volumes:
