@@ -22,7 +22,7 @@ services:
             traefik.port: "8069"
 
     db:
-        image: postgres:${DB_VERSION}-alpine
+        image: tecnativa/postgres-autoconf:${DB_VERSION}-alpine
         environment:
             POSTGRES_DB: *dbname
             POSTGRES_USER: *dbuser
