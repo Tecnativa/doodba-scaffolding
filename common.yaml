@@ -27,10 +27,10 @@ services:
         environment:
             POSTGRES_DB: *dbname
             POSTGRES_USER: *dbuser
+            CONF_EXTRA: |
+                work_mem = 32MB
         volumes:
             - db:/var/lib/postgresql/data:z
-        command:
-            - -cwork_mem=32MB
 
     smtpfake:
         image: mailhog/mailhog
