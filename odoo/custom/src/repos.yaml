@@ -1,4 +1,3 @@
-# Odoo is always required
 # See https://github.com/Tecnativa/doodba#optodoocustomsrcreposyaml
 ./odoo:
     defaults:
