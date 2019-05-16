@@ -7,7 +7,7 @@
 #
 #   git clean -ffd
 
-version: "2.1"
+version: "2.4"
 
 services:
     odoo:

@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2.4"
 services:
     odoo:
         image: $ODOO_IMAGE:$ODOO_MINOR
@@ -24,6 +24,7 @@ services:
 
     db:
         image: tecnativa/postgres-autoconf:${DB_VERSION}-alpine
+        shm_size: 512mb
         environment:
             POSTGRES_DB: *dbname
             POSTGRES_USER: *dbuser
