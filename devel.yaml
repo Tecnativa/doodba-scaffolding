@@ -51,6 +51,9 @@ services:
             - wdb
         command:
             - odoo
+            - --limit-memory-soft=0
+            - --limit-time-real-cron=0
+            - --limit-time-real=0
             - --workers=0
             # XXX Odoo v8 has no `--dev` mode; Odoo v9 has no parameters
             - --dev=reload,qweb,werkzeug,xml
