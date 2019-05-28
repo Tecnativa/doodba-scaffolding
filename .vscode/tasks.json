@@ -22,23 +22,24 @@
         {
             "label": "Update git code",
             "type": "shell",
-            "command": "docker-compose",
+            "command": "env",
             "args": [
+                {
+                    "value": "UID=$(id -u)",
+                    "quoting": "weak"
+                },
+                {
+                    "value": "GID=$(id -g)",
+                    "quoting": "weak"
+                },
+                {
+                    "value": "UMASK=$(umask)",
+                    "quoting": "weak"
+                },
+                "docker-compose",
                 "--file=setup-devel.yaml",
                 "run",
                 "--rm",
-                {
-                    "value": "-eUID=$UID",
-                    "quoting": "weak"
-                },
-                {
-                    "value": "-eGID=$(id -g $USER)",
-                    "quoting": "weak"
-                },
-                {
-                    "value": "-eUMASK=$(umask)",
-                    "quoting": "weak"
-                },
                 "odoo"
             ],
             "options": {
@@ -50,6 +51,7 @@
                 },
                 "cwd": "${workspaceRoot}"
             },
+            "group": "build",
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
@@ -71,12 +73,30 @@
         },
         {
             "label": "Build images",
-            "type": "process",
-            "command": "docker-compose",
+            "type": "shell",
+            "command": "env",
             "args": [
+                {
+                    "value": "UID=$(id -u)",
+                    "quoting": "weak"
+                },
+                {
+                    "value": "GID=$(id -g)",
+                    "quoting": "weak"
+                },
+                "docker-compose",
                 "build",
                 "--pull"
             ],
+            "options": {
+                "shell": {
+                    "executable": "sh",
+                    "args": [
+                        "-c"
+                    ]
+                },
+                "cwd": "${workspaceRoot}"
+            },
             "group": "build",
             "problemMatcher": [],
         },
