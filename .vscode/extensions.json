@@ -5,7 +5,7 @@
         "lextudio.restructuredtext",
         "mrorz.language-gettext",
         "ms-python.python",
-        "PeterJausovec.vscode-docker",
+        "ms-azuretools.vscode-docker",
         "qub.qub-xml-vscode",
         "robinbentley.sass-indented",
     ]
