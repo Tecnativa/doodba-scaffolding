@@ -29,8 +29,8 @@ services:
         environment:
             DEPTH_DEFAULT: 100
             # XXX Export these variables before running setup to own the files
-            UID: "$UID"
-            GID: "$GID"
+            UID: "${UID:-1000}"
+            GID: "${GID:-1000}"
             UMASK: "$UMASK"
         user: root
         entrypoint: autoaggregate
