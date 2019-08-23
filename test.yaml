@@ -56,6 +56,13 @@ services:
             traefik.frontend.passHostHeader: "true"
             traefik.port: "8025"
             traefik.frontend.rule: "Host:${DOMAIN_TEST};PathPrefixStrip:/smtpfake/"
+        volumes:
+            - "smtpconf:/etc/mailhog:ro,z"
+        entrypoint: [sh, -c]
+        command:
+            - test -r /etc/mailhog/auth &&
+              export MH_AUTH_FILE=/etc/mailhog/auth;
+              exec MailHog
 
 networks:
     default:
@@ -72,3 +79,4 @@ networks:
 volumes:
     filestore:
     db:
+    smtpconf:
