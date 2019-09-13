@@ -9,6 +9,7 @@ services:
                 UID: "${UID:-1000}"
                 GID: "${GID:-1000}"
         environment:
+            EMAIL_FROM: "$SMTP_DEFAULT_FROM"
             PGDATABASE: &dbname prod
             PGUSER: &dbuser "$DB_USER"
             DB_FILTER: "$DB_FILTER"
