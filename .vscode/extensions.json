@@ -7,6 +7,6 @@
         "ms-python.python",
         "ms-azuretools.vscode-docker",
         "qub.qub-xml-vscode",
-        "robinbentley.sass-indented",
+        "syler.sass-indented",
     ]
 }
