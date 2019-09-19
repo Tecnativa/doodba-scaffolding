@@ -19,6 +19,7 @@
     ],
     "python.linting.pylintEnabled": true,
     "python.pythonPath": "${workspaceRoot}/.vscode/doodba/python",
+    "restructuredtext.confPath": "",
     "search.useIgnoreFiles": false,
     "search.followSymlinks": false,
 }
