@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-from __future__ import print_function
-
 from configparser import ConfigParser
+from glob import iglob
 from os import path
 from urllib.request import urlretrieve
+import json
 import os
 import shutil
 import sys
@@ -27,12 +27,13 @@ CONFIGS = PYLINT_CONFIGS + (
     "pylint-odoo/master/pylint_odoo/examples/.jslintrc",
 )
 DEST = path.join(path.dirname(__file__), "doodba")
-ENV_FILE = path.join(DEST, "..", "..", ".env")
+ROOT = path.abspath(path.join(DEST, "..", ".."))
+ENV_FILE = path.join(ROOT, ".env")
 env = env_vars_from_file(ENV_FILE)
 
 # Use the right Python version for current Doodba project
 version = env.get("ODOO_MINOR")
-if version in {"8.0", "9.0", "10.0"}:
+if version in {"7.0", "8.0", "9.0", "10.0"}:
     executable = shutil.which("python2") or shutil.which("python")
 else:
     executable = sys.executable
@@ -65,12 +66,32 @@ baseparser["ODOOLINT"]["valid_odoo_versions"] = version
 with open(path.join(DEST, "doodba_pylint.cfg"), "w") as config:
     baseparser.write(config)
 
+# Produce VSCode workspace
+WORKSPACE = path.join(ROOT, "doodba-devel.code-workspace")
+try:
+    with open(WORKSPACE) as fp:
+        workspace_config = json.load(fp)
+except (FileNotFoundError, json.decoder.JSONDecodeError):
+    workspace_config = {}
+workspace_config["folders"] = []
+git_subfolders = iglob(path.join(
+    ROOT, "odoo", "custom", "src", "*", ".git", ".."))
+for subrepo in sorted(git_subfolders):
+    workspace_config["folders"].append({
+        "path": path.abspath(subrepo)[len(ROOT) + 1:],
+    })
+# HACK https://github.com/microsoft/vscode/issues/37947 put top folder last
+workspace_config["folders"].append({"path": "."})
+with open(WORKSPACE, "w") as fp:
+    json.dump(workspace_config, fp, indent=4)
+
 # Final reminder
 print("""
 Setup finished:
 
 - Configured to use {}
 - Linters configured for Odoo {}
+- Created doodba-devel.code-workspace file with present git subfolders
 
 To have full Doodba VSCode support, remember to:
 
@@ -79,6 +100,8 @@ To have full Doodba VSCode support, remember to:
 - Install eslint
 - Install pylint-odoo (both for Python 2 and 3)
 - Install flake8 (both for Python 2 and 3)
+- Load the created workspace file
+- Execute this task again each time you add an addons subrepo
 
-Enjoy :)
+Enjoy 😃
 """.format(executable, version))
