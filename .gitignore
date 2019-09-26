@@ -14,8 +14,10 @@ docker-compose.yml
 **.egg-info
 **.orig
 
-# Editor garbage folders
+# User-specific or editor-specific development files and settings
 .vscode
+doodba-devel.code-workspace
+src
 
 # Project-specific docker configurations
 .docker
