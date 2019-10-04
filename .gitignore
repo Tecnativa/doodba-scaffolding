@@ -16,7 +16,7 @@ docker-compose.yml
 
 # User-specific or editor-specific development files and settings
 .vscode
-doodba-devel.code-workspace
+doodba.*.code-workspace
 src
 
 # Project-specific docker configurations
