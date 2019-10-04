@@ -29,6 +29,7 @@ CONFIGS = PYLINT_CONFIGS + (
 DEST = path.join(path.dirname(__file__), "doodba")
 ROOT = path.abspath(path.join(DEST, "..", ".."))
 ENV_FILE = path.join(ROOT, ".env")
+SCAFFOLDING_NAME = path.basename(path.abspath(ROOT))
 env = env_vars_from_file(ENV_FILE)
 
 # Use the right Python version for current Doodba project
@@ -42,6 +43,12 @@ try:
 except FileNotFoundError:
     pass
 os.symlink(executable, path.join(DEST, "python"))
+
+# Enable development environment by default
+try:
+    os.symlink("devel.yaml", path.join(ROOT, "docker-compose.yml"), True)
+except FileExistsError:
+    pass
 
 # Download linter configs
 for config in CONFIGS:
@@ -67,7 +74,7 @@ with open(path.join(DEST, "doodba_pylint.cfg"), "w") as config:
     baseparser.write(config)
 
 # Produce VSCode workspace
-WORKSPACE = path.join(ROOT, "doodba-devel.code-workspace")
+WORKSPACE = path.join(ROOT, "doodba.%s.code-workspace" % SCAFFOLDING_NAME)
 try:
     with open(WORKSPACE) as fp:
         workspace_config = json.load(fp)
