@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from configparser import ConfigParser
-from glob import iglob
+from glob import glob
 from os import path
 from urllib.request import urlretrieve
 import json
@@ -81,9 +81,10 @@ try:
 except (FileNotFoundError, json.decoder.JSONDecodeError):
     workspace_config = {}
 workspace_config["folders"] = []
-git_subfolders = iglob(path.join(
+addon_repos = glob(path.join(ROOT, "odoo", "custom", "src", "private"))
+addon_repos += glob(path.join(
     ROOT, "odoo", "custom", "src", "*", ".git", ".."))
-for subrepo in sorted(git_subfolders):
+for subrepo in sorted(addon_repos):
     workspace_config["folders"].append({
         "path": path.abspath(subrepo)[len(ROOT) + 1:],
     })
