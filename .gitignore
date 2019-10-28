@@ -1,11 +1,11 @@
 # Ignore all src directories except private and files with a dot
-odoo/auto
-odoo/custom/src/*
-!odoo/custom/src/private
-!odoo/custom/src/*.*
+/odoo/auto
+/odoo/custom/src/*
+!/odoo/custom/src/private
+!/odoo/custom/src/*.*
 
 # Ignore docker-compose.yml by default, to allow easy defaults per clone
-docker-compose.yml
+/docker-compose.yml
 
 # Compiled formats, cache, temporary files, git garbage
 **.~
@@ -15,9 +15,9 @@ docker-compose.yml
 **.orig
 
 # User-specific or editor-specific development files and settings
-.vscode
-doodba.*.code-workspace
-src
+/.vscode
+/doodba.*.code-workspace
+/src
 
 # Project-specific docker configurations
-.docker
+/.docker
