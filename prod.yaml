@@ -72,4 +72,7 @@ volumes:
     backup_cache:
     filestore:
     db:
-    smtp:
+    mailconfig:
+    maildata:
+    maillogs:
+    mailstate:
