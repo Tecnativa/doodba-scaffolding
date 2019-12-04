@@ -55,6 +55,7 @@ services:
         image: tecnativa/duplicity:postgres-s3
         hostname: backup
         domainname: "$DOMAIN_PROD"
+        init: true
         environment:
             DST: "s3://s3.amazonaws.com/$BACKUP_S3_BUCKET"
             EMAIL_FROM: "$BACKUP_EMAIL_FROM"
