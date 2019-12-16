@@ -15,7 +15,7 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
-                "panel": "dedicated",
+                "panel": "shared",
                 "showReuseMessage": false
             },
         },
@@ -69,6 +69,14 @@
                 "pull"
             ],
             "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+            },
             "problemMatcher": [],
         },
         {
@@ -98,6 +106,14 @@
                 "cwd": "${workspaceRoot}"
             },
             "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+            },
             "problemMatcher": [],
         },
         {
@@ -108,7 +124,14 @@
                 "up",
                 "-d"
             ],
-            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+            },
             "problemMatcher": [],
         },
         {
@@ -124,7 +147,29 @@
                     "DOODBA_PTVSD_ENABLE": "1"
                 }
             },
-            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+            },
+            "problemMatcher": [],
+        },
+        {
+            "label": "Stop project",
+            "type": "process",
+            "command": "docker-compose",
+            "args": ["stop"],
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+            },
             "problemMatcher": [],
         },
         {
@@ -137,6 +182,14 @@
                 "odoo",
                 "odoo_proxy"
             ],
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+            },
             "problemMatcher": [],
         },
         {
@@ -150,6 +203,14 @@
                 "-f"
             ],
             "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true,
+            },
             "problemMatcher": [],
         },
     ],
