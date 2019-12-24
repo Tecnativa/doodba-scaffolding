@@ -19,7 +19,7 @@ services:
     tty: true
     command:
       - --ACME.ACMELogging
-      - --ACME.Email=you@example.com
+      - --ACME.Email=you@example.com  # XXX email to get notification on certificate expiration
       - --ACME.EntryPoint=https
       - --ACME.HTTPChallenge.entryPoint=http
       - --ACME.OnHostRule
