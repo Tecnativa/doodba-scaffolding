@@ -57,7 +57,7 @@ services:
         domainname: "$DOMAIN_PROD"
         init: true
         environment:
-            DST: "s3://s3.amazonaws.com/$BACKUP_S3_BUCKET"
+            DST: "s3://$BACKUP_S3_BUCKET_PATH"
             EMAIL_FROM: "$BACKUP_EMAIL_FROM"
             EMAIL_TO: "$BACKUP_EMAIL_TO"
             PGDATABASE: *dbname
