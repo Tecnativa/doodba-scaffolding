@@ -47,6 +47,7 @@ services:
             - mailconfig:/tmp/docker-mailserver:z
             - maildata:/var/mail:z
             - maillogs:/var/log/mail:z
+            - maillogssupervisord:/var/log/supervisor:z
             - mailstate:/var/mail-state:z
         cap_add:
             - SYS_PTRACE
