@@ -55,7 +55,8 @@ services:
             - --limit-time-real-cron=9999999
             - --limit-time-real=9999999
             - --workers=0
-            # XXX Odoo v8 has no `--dev` mode; Odoo v9 has no parameters
+            # XXX Odoo v8 has no `--dev` mode; Odoo v9 has no parameters; 
+            # Odoo v10+ don't translate views when xml is in `--dev`  
             - --dev=reload,qweb,werkzeug,xml
 
     db:
