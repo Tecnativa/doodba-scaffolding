@@ -19,6 +19,7 @@ services:
             default:
             inverseproxy_shared:
         labels:
+            # Labels only for Traefik v1
             traefik.longpolling.frontend.rule:
                 "Host:${DOMAIN_PROD};PathPrefix:/longpolling/"
             traefik.www.frontend.rule: "Host:${DOMAIN_PROD}"
@@ -28,6 +29,23 @@ services:
             traefik.alt.frontend.redirect.replacement:
                 "$$1://${DOMAIN_PROD}/$$2"
 
+            # Labels only for Traefik v2
+            traefik.http.middlewares.alt2web.redirectregex.regex: "^(.*)://${DOMAIN_PROD_ALT}/(.*)$$"
+            traefik.http.middlewares.alt2web.redirectregex.replacement: "$$1://${DOMAIN_PROD}/$$2"
+            traefik.http.routers.longpolling.rule: "Host(`${DOMAIN_PROD}`) && PathPrefix(`/longpolling/`)"
+            traefik.http.routers.web-alt-0.entrypoints: "web"
+            traefik.http.routers.web-alt-0.middlewares: "alt2web"
+            traefik.http.routers.web-alt-0.rule: "Host(`${DOMAIN_PROD_ALT}`)"
+            traefik.http.routers.web-alt-0.service: "dummy"
+            traefik.http.routers.web-secured-alt-0.entrypoints: "web-secured"
+            traefik.http.routers.web-secured-alt-0.middlewares: "alt2web"
+            traefik.http.routers.web-secured-alt-0.rule: "Host(`${DOMAIN_PROD_ALT}`)"
+            traefik.http.routers.web-secured-alt-0.service: "dummy"
+            traefik.http.routers.web-secured-alt-0.tls.certresolver: "main-acme"
+            traefik.http.routers.web-secured.rule: "Host(`${DOMAIN_PROD}`)"
+            traefik.http.routers.web-secured.tls.domains[0].main: "${DOMAIN_PROD}"
+            traefik.http.routers.web-secured.tls.domains[0].sans: "${DOMAIN_PROD_ALT}"
+            traefik.http.routers.web.rule: "Host(`${DOMAIN_PROD}`)"
     db:
         extends:
             file: common.yaml
