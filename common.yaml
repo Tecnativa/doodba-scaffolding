@@ -78,6 +78,7 @@ services:
             PGDATABASE: *dbname
             PGUSER: *dbuser
             SMTP_HOST: smtplocal
+            TZ: "$BACKUP_TZ"
         volumes:
             - backup_cache:/root:z
             - filestore:/mnt/backup/src/odoo:z
