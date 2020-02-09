@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3.7"
 
 services:
     odoo_proxy:
@@ -16,9 +16,6 @@ services:
             TARGET: odoo
 
     odoo:
-        extends:
-            file: common.yaml
-            service: odoo
         build:
             args:
                 # To aggregate in development, use `setup-devel.yaml`
@@ -59,17 +56,12 @@ services:
             - --dev=reload,qweb,werkzeug,xml
 
     db:
-        extends:
-            file: common.yaml
-            service: db
         environment:
             POSTGRES_DB: *dbname
             POSTGRES_PASSWORD: odoopassword
 
     smtp:
-        extends:
-            file: common.yaml
-            service: smtpfake
+        image: mailhog/mailhog
         networks: *public
         ports:
             - "127.0.0.1:8025:8025"

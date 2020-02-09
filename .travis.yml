@@ -33,7 +33,7 @@ script:
     -v /var/run/docker.sock:/var/run/docker.sock:z
     -w $PWD
     -e ADDON_CATEGORIES=-p
-    -e COMPOSE_FILE=test.yaml
+    -e COMPOSE_FILE=docker-compose.yaml:test.yaml
     -e ODOO_MAJOR=$ODOO_MAJOR
     -e ODOO_MINOR=$ODOO_MINOR
     tecnativa/doodba-qa"

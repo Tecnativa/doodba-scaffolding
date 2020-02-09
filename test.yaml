@@ -1,9 +1,6 @@
-version: "2.4"
+version: "3.7"
 services:
     odoo:
-        extends:
-            file: common.yaml
-            service: odoo
         env_file:
             - .docker/odoo.env
             - .docker/db-access.env
@@ -33,17 +30,12 @@ services:
             - --max-cron-threads=1
 
     db:
-        extends:
-            file: common.yaml
-            service: db
         env_file:
             - .docker/db-creation.env
         restart: unless-stopped
 
     smtp:
-        extends:
-            file: common.yaml
-            service: smtpfake
+        image: mailhog/mailhog
         restart: unless-stopped
         networks:
             default:
