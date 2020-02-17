@@ -19,6 +19,7 @@ services:
         volumes:
             - filestore:/var/lib/odoo:z
         labels:
+            traefik.backend.buffering.retryExpression: IsNetworkError() && Attempts() < 5
             traefik.docker.network: "inverseproxy_shared"
             traefik.enable: "true"
             traefik.frontend.passHostHeader: "true"
