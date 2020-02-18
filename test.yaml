@@ -22,11 +22,20 @@ services:
             globalwhitelist_shared:
             inverseproxy_shared:
         labels:
+            # Labels only for Traefik v1
             traefik.frontend.headers.customResponseHeaders:
                 "X-Robots-Tag:noindex, nofollow"
             traefik.longpolling.frontend.rule:
                 "Host:${DOMAIN_TEST};PathPrefix:/longpolling/"
             traefik.www.frontend.rule: "Host:${DOMAIN_TEST}"
+
+            # Labels only for Traefik v2
+            traefik.http.middlewares.no-robots.headers.customresponseheaders.X-Robots-Tag: "noindex, nofollow"
+            traefik.http.routers.longpolling.rule: "Host(`${DOMAIN_TEST}`) && PathPrefix(`/longpolling/`)"
+            traefik.http.routers.web-secured.middlewares: "no-robots"
+            traefik.http.routers.web-secured.rule: "Host(`${DOMAIN_TEST}`)"
+            traefik.http.routers.web-secured.tls.domains[0].main: "${DOMAIN_TEST}"
+
         command:
             - odoo
             - --workers=2
@@ -53,9 +62,24 @@ services:
         labels:
             traefik.docker.network: "inverseproxy_shared"
             traefik.enable: "true"
+
+            # Labels only for Traefik v1
             traefik.frontend.passHostHeader: "true"
             traefik.port: "8025"
             traefik.frontend.rule: "Host:${DOMAIN_TEST};PathPrefixStrip:/smtpfake/"
+
+            # Labels only for Traefik v2
+            traefik.entryPoints.web-secured.address: ":443"
+            traefik.http.middlewares.smtpfake-stripprefix.stripprefix.prefixes: "/smtpfake"
+            traefik.http.routers.smtpfake.entrypoints: "web-secured"
+            traefik.http.routers.smtpfake.middlewares: "smtpfake-stripprefix"
+            traefik.http.routers.smtpfake.rule: "Host(`${DOMAIN_TEST}`) && PathPrefix(`/smtpfake`)"
+            traefik.http.routers.smtpfake.rule: "Host(`${DOMAIN_TEST}`)"
+            traefik.http.routers.smtpfake.service: "smtpfake"
+            traefik.http.routers.smtpfake.tls.domains[0].main: "${DOMAIN_TEST}"
+            traefik.http.services.smtpfake.loadBalancer.passHostHeader: "true"
+            traefik.http.services.smtpfake.loadBalancer.server.port: "8025"
+            traefik.http.services.smtpfake.loadBalancer.server.scheme: "http"
         volumes:
             - "smtpconf:/etc/mailhog:ro,z"
         entrypoint: [sh, -c]

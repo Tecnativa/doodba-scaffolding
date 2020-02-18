@@ -22,9 +22,32 @@ services:
             traefik.backend.buffering.retryExpression: IsNetworkError() && Attempts() < 5
             traefik.docker.network: "inverseproxy_shared"
             traefik.enable: "true"
+
+            # Labels only for Traefik v1
             traefik.frontend.passHostHeader: "true"
             traefik.longpolling.port: "8072"
             traefik.port: "8069"
+
+            # Labels only for Traefik v2
+            traefik.entryPoints.web-secured.address: ":443"
+            traefik.entryPoints.web.address: ":80"
+            traefik.http.middlewares.web2web-secured.redirectscheme.scheme: "https"
+            traefik.http.routers.longpolling.entrypoints: "web-secured"
+            traefik.http.routers.longpolling.service: "longpolling"
+            traefik.http.routers.web-secured.entrypoints: "web-secured"
+            traefik.http.routers.web-secured.service: "odoo"
+            traefik.http.routers.web-secured.tls.certresolver: "main-acme"
+            traefik.http.routers.web.entrypoints: "web"
+            traefik.http.routers.web.middlewares: "web2web-secured"
+            traefik.http.routers.web.service: "dummy"
+            # HACK https://github.com/containous/traefik/issues/4863#issuecomment-491453743
+            traefik.http.services.dummy.loadBalancer.server.url: ""
+            traefik.http.services.longpolling.loadBalancer.passHostHeader: "true"
+            traefik.http.services.longpolling.loadBalancer.server.port: "8072"
+            traefik.http.services.longpolling.loadBalancer.server.scheme: "http"
+            traefik.http.services.odoo.loadBalancer.passHostHeader: "true"
+            traefik.http.services.odoo.loadBalancer.server.port: "8069"
+            traefik.http.services.odoo.loadBalancer.server.scheme: "http"
 
     db:
         image: tecnativa/postgres-autoconf:${DB_VERSION}-alpine
