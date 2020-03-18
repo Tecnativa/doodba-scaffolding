@@ -1,4 +1,5 @@
 version: "2.4"
+
 services:
     odoo:
         extends:
@@ -22,10 +23,8 @@ services:
             globalwhitelist_shared:
             inverseproxy_shared:
         labels:
-            traefik.frontend.headers.customResponseHeaders:
-                "X-Robots-Tag:noindex, nofollow"
-            traefik.longpolling.frontend.rule:
-                "Host:${DOMAIN_TEST};PathPrefix:/longpolling/"
+            traefik.frontend.headers.customResponseHeaders: "X-Robots-Tag:noindex, nofollow"
+            traefik.longpolling.frontend.rule: "Host:${DOMAIN_TEST};PathPrefix:/longpolling/"
             traefik.www.frontend.rule: "Host:${DOMAIN_TEST}"
         command:
             - odoo
@@ -54,15 +53,13 @@ services:
             traefik.docker.network: "inverseproxy_shared"
             traefik.enable: "true"
             traefik.frontend.passHostHeader: "true"
-            traefik.port: "8025"
             traefik.frontend.rule: "Host:${DOMAIN_TEST};PathPrefixStrip:/smtpfake/"
+            traefik.port: "8025"
         volumes:
             - "smtpconf:/etc/mailhog:ro,z"
         entrypoint: [sh, -c]
         command:
-            - test -r /etc/mailhog/auth &&
-              export MH_AUTH_FILE=/etc/mailhog/auth;
-              exec MailHog
+            - test -r /etc/mailhog/auth && export MH_AUTH_FILE=/etc/mailhog/auth; exec MailHog
 
 networks:
     default:

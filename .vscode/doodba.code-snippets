@@ -13,8 +13,8 @@
             "\ttarget: ${40} \\$ODOO_VERSION",
             "\tmerges:",
             "\t\t- ${40} \\$ODOO_VERSION",
-            "\t\t- ${40} refs/pull/${50:1234}/head",
+            "\t\t- ${40} refs/pull/${50:1234}/head"
         ],
-        "description": "For Loop"
+        "description": "Git-aggregator repo definition with merges"
     }
 }
