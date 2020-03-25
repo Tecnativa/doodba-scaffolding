@@ -26,12 +26,15 @@ services:
             - public
         volumes:
             - ./odoo/custom/src:/opt/odoo/custom/src:rw,z
+            # XXX Uncomment to fetch private repositories
+            #- $SSH_AUTH_SOCK:/ssh-agent
         environment:
             DEPTH_DEFAULT: 100
             # XXX Export these variables before running setup to own the files
             UID: "${UID:-1000}"
             GID: "${GID:-1000}"
             UMASK: "$UMASK"
+            SSH_AUTH_SOCK: "/ssh-agent"
         user: root
         entrypoint: autoaggregate
 
