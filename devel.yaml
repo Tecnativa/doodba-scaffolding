@@ -66,6 +66,17 @@ services:
             POSTGRES_DB: *dbname
             POSTGRES_PASSWORD: odoopassword
 
+    pgadmin:
+        image: dpage/pgadmin4
+        depends_on:
+            - db
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin
+            PGADMIN_DEFAULT_PASSWORD: admin
+        networks: *public
+        ports:
+            - "127.0.0.1:5050:80"
+
     smtp:
         extends:
             file: common.yaml
